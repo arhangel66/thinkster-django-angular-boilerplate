@@ -29,6 +29,7 @@
             login: login,
             register: register,
             setAuthenticatedAccount: setAuthenticatedAccount,
+            logout: logout,
             unauthenticate: unauthenticate
         };
 
@@ -134,6 +135,29 @@
          */
         function unauthenticate() {
             delete $cookies.authenticatedAccount;
+        }
+
+        function logout() {
+            return $http.post('/api/v1/auth/logout/')
+                .then(logoutSuccessFn, logoutErrorFn);
+
+            /**
+             * @name logoutSuccessFn
+             * @desc Unauthenticate and redirect to index with page reload
+             */
+            function logoutSuccessFn(data, status, headers, config) {
+                Authentication.unauthenticate();
+
+                window.location = '/';
+            }
+
+            /**
+             * @name logoutErrorFn
+             * @desc Log "Epic failure!" to the console
+             */
+            function logoutErrorFn(data, status, headers, config) {
+                console.error('Epic failure!');
+            }
         }
     }
 })();
